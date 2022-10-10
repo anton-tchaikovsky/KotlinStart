@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KotlinStart</string>
+    <string name="first_button">FirstButton</string>
+    <string name="second_button">SecondButton</string>
+    <string name="third_button">ThirdButton</string>
+    <string name="fourth_button">FourthButton</string>
 </resources>

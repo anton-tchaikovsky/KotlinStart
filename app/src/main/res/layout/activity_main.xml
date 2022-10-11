@@ -19,31 +19,78 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/button1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/first_button" />
-        <Button
-            android:id="@+id/button2"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/first_button" />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/second_button" />
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/third_button"
+                />
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fourth_button"
+                android:onClick="onClickFourthButton"/>
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/second_button" />
-        <Button
-            android:id="@+id/button3"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+        <RadioButton
+            android:id="@+id/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/third_button" />
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fourth_button"
-            android:onClick="onClickFourthButton"/>
+            android:text="@string/black"
+            android:textColor="@android:color/black"
+            android:checked="true"
+            />
+
+            <RadioButton
+                android:id="@+id/red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:text="@string/red"
+                />
+            <RadioButton
+                android:id="@+id/blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_blue_light"
+                android:text="@string/blue"/>
+            <RadioButton
+                android:id="@+id/yellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_orange_light"
+                android:text="@string/yellow"/>
+
+        </RadioGroup>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

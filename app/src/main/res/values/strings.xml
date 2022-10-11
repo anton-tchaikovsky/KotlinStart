@@ -4,4 +4,10 @@
     <string name="second_button">SecondButton</string>
     <string name="third_button">ThirdButton</string>
     <string name="fourth_button">FourthButton</string>
+    <string name="black">black</string>
+    <string name="red">red</string>
+    <string name="blue">blue</string>
+    <string name="yellow">yellow</string>
+
+
 </resources>

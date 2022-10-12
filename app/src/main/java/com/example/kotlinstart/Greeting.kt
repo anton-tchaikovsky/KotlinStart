@@ -1,5 +1,5 @@
 package com.example.kotlinstart
 
 object Greeting{
-    const val greeting = "Hello!"
+    const val greeting = "Hello."
 }

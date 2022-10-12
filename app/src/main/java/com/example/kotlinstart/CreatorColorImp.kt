@@ -21,4 +21,13 @@ import android.content.Context
              else -> Colors.BLACK
          }
      }
+
+     companion object{
+         lateinit var colorsList:List<Colors>
+     }
+
+     init {
+         colorsList = listOf(Colors.BLACK, Colors.RED, Colors.BLUE, Colors.YELLOW)
+     }
+
 }

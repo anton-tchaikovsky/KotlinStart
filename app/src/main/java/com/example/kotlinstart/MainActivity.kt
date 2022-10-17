@@ -77,6 +77,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val textDataFourth = textData.copy(title = "Clicked ${(view as Button).text}",
                 color = checkedColor )
             setText(textDataFourth)
+
+
         }
     }
 
@@ -121,6 +123,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Colors filter for Blue and Yellow")
+        CreatorColorImp.colorsList.filter { it==Colors.YELLOW || it==Colors.BLUE}.forEach { Log.i(TAG, it.toString()) }
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Colors transformer to String")
+        CreatorColorImp.colorsList.map {it.toString()}.forEach { Log.i(TAG, it) }
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Colors find Black")
+        Log.i (TAG, CreatorColorImp.colorsList.find {it==Colors.BLACK}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Colors count BLACK and YELLOW")
+        Log.i (TAG, CreatorColorImp.colorsList.count {it==Colors.BLACK || it==Colors.YELLOW}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Is colors any BLACK?" )
+        Log.i (TAG, CreatorColorImp.colorsList.any{it==Colors.BLACK}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Is colors all BLACK?" )
+        Log.i (TAG, CreatorColorImp.colorsList.all{it==Colors.BLACK}.toString())
+
+        Log.i(TAG, "------------------------")
+
         Log.i(TAG, "Return interval 'a'..'f' to List")
         Log.i(TAG, ('a'..'f').toList().toString())
     }

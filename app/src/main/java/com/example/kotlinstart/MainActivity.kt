@@ -1,6 +1,8 @@
 package com.example.kotlinstart
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -27,7 +29,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textView = findViewById(R.id.tv)
         firstButton = findViewById(R.id.button1)
         secondButton = findViewById(R.id.button2)
-        val thirdButton: Button = findViewById(R.id.button3)
+
+        // Создание функциональной переменной для создание button по id
+        val thirdButton: (Int) -> Button = {
+            findViewById(it)
+        }
 
         // Установка начального текста в TextView пользовательского экрана
         setTextData("${Greeting.greeting} ${textData.titleStart}")
@@ -37,8 +43,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         secondButton.setOnClickListener(this)
 
         //Повесили слушатель с помощью анонимного экземпляра класса и лямбда-выражения
-        thirdButton.setOnClickListener {
-            setTextData("Clicked ${thirdButton.text}")
+        thirdButton(R.id.button3).setOnClickListener {
+            setTextData("Clicked ${thirdButton(R.id.button3).text}")
             setText(textData)
         }
 
@@ -83,8 +89,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     // Метод обновляет данные в экземпляре TextData:title - из переданного атрибута, color - в зависимости от выбранной radioButton
-    private fun setTextData (title: String){
-        textData.title = title
+    private fun <T:CharSequence> setTextData (title: T ){ // функция использует generic-тип
+        textData.title = title.toString()
         val radioButton: RadioButton = findViewById(findViewById<RadioGroup>(R.id.radio_group).checkedRadioButtonId)
         val checkedColor:Colors = creatorColor.getColor(radioButton.textColors.defaultColor)
 
@@ -104,52 +110,52 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun cycle() {
         for (i in 0 until CreatorColorImp.colorsList.size) {
-            if (i == 0) Log.i(TAG, "Colors")
+            if (i == 0) Log.i(TAG, creatorColor.title)
             Log.i(TAG, CreatorColorImp.colorsList[i].toString())
         }
 
         Log.i(TAG, "------------------------")
 
         for (i in (CreatorColorImp.colorsList.size - 1) downTo 0 step 1) {
-            if (i == CreatorColorImp.colorsList.size - 1) Log.i(TAG, "Colors reverse")
+            if (i == CreatorColorImp.colorsList.size - 1) Log.i(TAG, "${creatorColor.title} reverse")
             Log.i(TAG, CreatorColorImp.colorsList[i].toString())
         }
 
         Log.i(TAG, "------------------------")
 
         for (i in 0 until CreatorColorImp.colorsList.size step 2) {
-            if (i == 0) Log.i(TAG, "Colors step2")
+            if (i == 0) Log.i(TAG, "${creatorColor.title} step2")
             Log.i(TAG, CreatorColorImp.colorsList[i].toString())
         }
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Colors filter for Blue and Yellow")
+        Log.i(TAG, "${creatorColor.title} filter for Blue and Yellow")
         CreatorColorImp.colorsList.filter { it==Colors.YELLOW || it==Colors.BLUE}.forEach { Log.i(TAG, it.toString()) }
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Colors transformer to String")
+        Log.i(TAG, "${creatorColor.title} transformer to String")
         CreatorColorImp.colorsList.map {it.toString()}.forEach { Log.i(TAG, it) }
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Colors find Black")
+        Log.i(TAG, "${creatorColor.title} find Black")
         Log.i (TAG, CreatorColorImp.colorsList.find {it==Colors.BLACK}.toString())
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Colors count BLACK and YELLOW")
+        Log.i(TAG, "${creatorColor.title} count BLACK and YELLOW")
         Log.i (TAG, CreatorColorImp.colorsList.count {it==Colors.BLACK || it==Colors.YELLOW}.toString())
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Is colors any BLACK?" )
+        Log.i(TAG, "Is ${creatorColor.title} any BLACK?" )
         Log.i (TAG, CreatorColorImp.colorsList.any{it==Colors.BLACK}.toString())
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Is colors all BLACK?" )
+        Log.i(TAG, "Is ${creatorColor.title} all BLACK?" )
         Log.i (TAG, CreatorColorImp.colorsList.all{it==Colors.BLACK}.toString())
 
         Log.i(TAG, "------------------------")

@@ -1,8 +1,6 @@
 package com.example.kotlinstart
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
-import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,7 +18,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var secondButton: Button
     private val creatorColor = CreatorColorImp(this)
     private val textData = TextData()
-
 
     @SuppressLint("SetTextI18n", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,8 +101,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     // Метод заполняет TextView на пользовательском экране
     private fun setText(textData: TextData) {
-        textView.setTextColor(creatorColor.getColor(textData.color))
-        textView.text = textData.title
+        // используем функцию apply
+        textView.apply {
+            setTextColor(creatorColor.getColor(textData.color))
+            text = textData.title
+        }
     }
 
     private fun cycle() {
@@ -160,8 +160,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         Log.i(TAG, "------------------------")
 
-        Log.i(TAG, "Return interval 'a'..'f' to List")
+        // используем функцию run
+        Log.i(TAG, "Is ${creatorColor.title} have YELLOW?" )
+        Log.i (TAG, CreatorColorImp.colorsList.run { contains(Colors.YELLOW).toString()})
+
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию also
+        Log.i(TAG, "${creatorColor.title} get title, get RED, get YELLOW" )
+        creatorColor
+            .also { Log.i(TAG, it.title) }
+            .also {Log.i(TAG, it.getColor(android.R.color.holo_red_dark).toString())}
+            .also {Log.i(TAG, it.getColor(android.R.color.holo_orange_light).toString())}
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Return interval 'a'..'f' to the List")
         Log.i(TAG, ('a'..'f').toList().toString())
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию let
+        Log.i(TAG, "Return the word begins with last letter from the List 'a'..'f'")
+        Log.i(TAG, ('a'..'f').toList().last().let {"$it" +"unction" })
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию with
+        Log.i(TAG, "StringFirst > StringSecond?")
+        Log.i(TAG, with ("StringFirst"){
+            length > "StringSecond".length
+        }.toString())
+
     }
 
     private fun checkingSingleton() {

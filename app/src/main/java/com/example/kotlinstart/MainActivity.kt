@@ -1,6 +1,7 @@
 package com.example.kotlinstart
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,7 +20,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val creatorColor = CreatorColorImp(this)
     private val textData = TextData()
 
-
     @SuppressLint("SetTextI18n", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textView = findViewById(R.id.tv)
         firstButton = findViewById(R.id.button1)
         secondButton = findViewById(R.id.button2)
-        val thirdButton: Button = findViewById(R.id.button3)
+
+        // Создание функциональной переменной для создание button по id
+        val thirdButton: (Int) -> Button = {
+            findViewById(it)
+        }
 
         // Установка начального текста в TextView пользовательского экрана
         setTextData("${Greeting.greeting} ${textData.titleStart}")
@@ -37,8 +41,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         secondButton.setOnClickListener(this)
 
         //Повесили слушатель с помощью анонимного экземпляра класса и лямбда-выражения
-        thirdButton.setOnClickListener {
-            setTextData("Clicked ${thirdButton.text}")
+        thirdButton(R.id.button3).setOnClickListener {
+            setTextData("Clicked ${thirdButton(R.id.button3).text}")
             setText(textData)
         }
 
@@ -47,6 +51,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         //Проверка класса Greeting на то,что он синглтон
         checkingSingleton()
+
+        //Обработка кнопки Weather для запуска приложения Weather
+        findViewById<Button>(R.id.weather_button).setOnClickListener {
+            sendBroadcast(Intent("com.example.weather.broadcastReceiver.broadcastReceiverForStartApp"))
+        }
+        // Обработка кнопки клиент-провайдер для запуска фрагмента
+        findViewById<Button>(R.id.client_provider).setOnClickListener {
+           supportFragmentManager.beginTransaction()
+               .replace(R.id.container, ClientProviderFragment.newInstance())
+               .addToBackStack("")
+               .commitAllowingStateLoss()
+        }
 
     }
 
@@ -77,12 +93,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val textDataFourth = textData.copy(title = "Clicked ${(view as Button).text}",
                 color = checkedColor )
             setText(textDataFourth)
+
+
         }
     }
 
     // Метод обновляет данные в экземпляре TextData:title - из переданного атрибута, color - в зависимости от выбранной radioButton
-    private fun setTextData (title: String){
-        textData.title = title
+    private fun <T:CharSequence> setTextData (title: T ){ // функция использует generic-тип
+        textData.title = title.toString()
         val radioButton: RadioButton = findViewById(findViewById<RadioGroup>(R.id.radio_group).checkedRadioButtonId)
         val checkedColor:Colors = creatorColor.getColor(radioButton.textColors.defaultColor)
 
@@ -96,33 +114,111 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     // Метод заполняет TextView на пользовательском экране
     private fun setText(textData: TextData) {
-        textView.setTextColor(creatorColor.getColor(textData.color))
-        textView.text = textData.title
+        // используем функцию apply
+        textView.apply {
+            setTextColor(creatorColor.getColor(textData.color))
+            text = textData.title
+        }
     }
 
     private fun cycle() {
         for (i in 0 until CreatorColorImp.colorsList.size) {
-            if (i == 0) Log.i(TAG, "Colors")
+            if (i == 0) Log.i(TAG, creatorColor.title)
             Log.i(TAG, CreatorColorImp.colorsList[i].toString())
         }
 
         Log.i(TAG, "------------------------")
 
         for (i in (CreatorColorImp.colorsList.size - 1) downTo 0 step 1) {
-            if (i == CreatorColorImp.colorsList.size - 1) Log.i(TAG, "Colors reverse")
+            if (i == CreatorColorImp.colorsList.size - 1) Log.i(TAG, "${creatorColor.title} reverse")
             Log.i(TAG, CreatorColorImp.colorsList[i].toString())
         }
 
         Log.i(TAG, "------------------------")
 
         for (i in 0 until CreatorColorImp.colorsList.size step 2) {
-            if (i == 0) Log.i(TAG, "Colors step2")
+            if (i == 0) Log.i(TAG, "${creatorColor.title} step2")
             Log.i(TAG, CreatorColorImp.colorsList[i].toString())
         }
 
         Log.i(TAG, "------------------------")
-        Log.i(TAG, "Return interval 'a'..'f' to List")
+
+        Log.i(TAG, "${creatorColor.title} filter for Blue and Yellow")
+        CreatorColorImp.colorsList.filter { it==Colors.YELLOW || it==Colors.BLUE}.forEach { Log.i(TAG, it.toString()) }
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "${creatorColor.title} transformer to String")
+        CreatorColorImp.colorsList.map {it.toString()}.forEach { Log.i(TAG, it) }
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "${creatorColor.title} find Black")
+        Log.i (TAG, CreatorColorImp.colorsList.find {it==Colors.BLACK}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "${creatorColor.title} count BLACK and YELLOW")
+        Log.i (TAG, CreatorColorImp.colorsList.count {it==Colors.BLACK || it==Colors.YELLOW}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Is ${creatorColor.title} any BLACK?" )
+        Log.i (TAG, CreatorColorImp.colorsList.any{it==Colors.BLACK}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Is ${creatorColor.title} all BLACK?" )
+        Log.i (TAG, CreatorColorImp.colorsList.all{it==Colors.BLACK}.toString())
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию run
+        Log.i(TAG, "Is ${creatorColor.title} have YELLOW?" )
+        Log.i (TAG, CreatorColorImp.colorsList.run { contains(Colors.YELLOW).toString()})
+
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию also
+        Log.i(TAG, "${creatorColor.title} get title, get RED, get YELLOW" )
+
+        /* не сокращенный вариант вызова функции also
+        fun log (creatorColor: CreatorColorImp){
+            Log.i(TAG, creatorColor.title)
+        }
+        val block: (CreatorColorImp) -> Unit = {creatorColor -> Log.i(TAG, creatorColor.title) }
+        или val block: (CreatorColorImp) -> Unit = ::log
+        creatorColor.also(block)
+        или creatorColor.also({creatorColor -> Log.i(TAG, creatorColor.title) })
+        без also
+        block(creatorColor)
+        */
+
+        creatorColor
+            .also { Log.i(TAG, creatorColor.title) }
+            .also {Log.i(TAG, it.getColor(android.R.color.holo_red_dark).toString())}
+            .also {Log.i(TAG, it.getColor(android.R.color.holo_orange_light).toString())}
+
+        Log.i(TAG, "------------------------")
+
+        Log.i(TAG, "Return interval 'a'..'f' to the List")
         Log.i(TAG, ('a'..'f').toList().toString())
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию let
+        Log.i(TAG, "Return the word begins with last letter from the List 'a'..'f'")
+        Log.i(TAG, ('a'..'f').toList().let {"${it.last()}" +"unction" })
+
+        Log.i(TAG, "------------------------")
+
+        // используем функцию with
+        Log.i(TAG, "StringFirst > StringSecond?")
+        Log.i(TAG, with ("StringFirst"){
+            length > "StringSecond".length
+        }.toString())
+
     }
 
     private fun checkingSingleton() {

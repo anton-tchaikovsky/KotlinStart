@@ -1,6 +1,7 @@
 package com.example.kotlinstart
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -50,6 +51,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         //Проверка класса Greeting на то,что он синглтон
         checkingSingleton()
+
+        //Обработка кнопки Weather для запуска приложения Weather
+        findViewById<Button>(R.id.weather_button).setOnClickListener {
+            sendBroadcast(Intent("com.example.weather.broadcastReceiver.broadcastReceiverForStartApp"))
+        }
+        // Обработка кнопки клиент-провайдер для запуска фрагмента
+        findViewById<Button>(R.id.client_provider).setOnClickListener {
+           supportFragmentManager.beginTransaction()
+               .replace(R.id.container, ClientProviderFragment.newInstance())
+               .addToBackStack("")
+               .commitAllowingStateLoss()
+        }
 
     }
 
@@ -169,8 +182,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // используем функцию also
         Log.i(TAG, "${creatorColor.title} get title, get RED, get YELLOW" )
+
+        /* не сокращенный вариант вызова функции also
+        fun log (creatorColor: CreatorColorImp){
+            Log.i(TAG, creatorColor.title)
+        }
+        val block: (CreatorColorImp) -> Unit = {creatorColor -> Log.i(TAG, creatorColor.title) }
+        или val block: (CreatorColorImp) -> Unit = ::log
+        creatorColor.also(block)
+        или creatorColor.also({creatorColor -> Log.i(TAG, creatorColor.title) })
+        без also
+        block(creatorColor)
+        */
+
         creatorColor
-            .also { Log.i(TAG, it.title) }
+            .also { Log.i(TAG, creatorColor.title) }
             .also {Log.i(TAG, it.getColor(android.R.color.holo_red_dark).toString())}
             .also {Log.i(TAG, it.getColor(android.R.color.holo_orange_light).toString())}
 
@@ -183,7 +209,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // используем функцию let
         Log.i(TAG, "Return the word begins with last letter from the List 'a'..'f'")
-        Log.i(TAG, ('a'..'f').toList().last().let {"$it" +"unction" })
+        Log.i(TAG, ('a'..'f').toList().let {"${it.last()}" +"unction" })
 
         Log.i(TAG, "------------------------")
 
